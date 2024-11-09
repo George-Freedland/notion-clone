@@ -1,0 +1,48 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid())
+  username String @unique
+  pages    Page[]
+}
+
+model Page {
+  id            String          @id @default(uuid())
+  userId        String
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  textItems     PageTextItem[]
+  imageItems    PageImageItem[]
+}
+
+enum TextType {
+  H1
+  H2
+  H3
+  PARAGRAPH
+}
+
+model PageTextItem {
+  id        String    @id @default(uuid())
+  content   String
+  type      TextType
+  pageId    String
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+}
+
+model PageImageItem {
+  id        String  @id @default(uuid())
+  source    String
+  height    Int
+  width     Int
+  pageId    String
+  page      Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+}
