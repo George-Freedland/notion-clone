@@ -1,7 +1,8 @@
 import cors from 'cors';
-import authRouter from './routes/auth';
+
 import { ApiError } from './types';
 import express, { Request, Response, NextFunction, Application } from 'express';
+import router from './routes';
 
 const app: Application = express();  // Typed as express.Application
 
@@ -15,7 +16,7 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 // Routes
-app.use('/auth', authRouter);
+app.use('/api', router);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
